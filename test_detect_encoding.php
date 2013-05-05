@@ -18,17 +18,18 @@ foreach ($possible_encodings as $encoding)
 	$specters[$encoding] = require 'specters/'.$encoding.'.php';
 }
 
-for ($i = 0; $i < strlen($data) - 1; $i++)
+if(preg_match_all("#(?<let>.{2})#",$data,$matches))
 {
-	$key = substr($data, $i, 2);
-
-	foreach ($possible_encodings as $encoding)
-	{
-		if (isset($specters[$encoding][$key]))
-		{
-			$weights[$encoding] += $specters[$encoding][$key];
-		}
-	}
+    foreach($matches['let'] as $key)
+    {
+    	foreach ($possible_encodings as $encoding)
+    	{
+    		if (isset($specters[$encoding][$key]))
+    		{
+    			$weights[$encoding] += $specters[$encoding][$key];
+    		}
+    	}
+    }
 }
 
 $sum_weight = array_sum($weights);
